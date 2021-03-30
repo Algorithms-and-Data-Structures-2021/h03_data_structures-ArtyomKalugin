@@ -5,11 +5,31 @@
 namespace itis {
 
 void LinkedDequeue::Enqueue(Element e) {
-  // TODO: напишите здесь свой код ...
+    if(size_ == 0){
+        DoublyNode *new_node = new DoublyNode(e, nullptr, nullptr);
+        back_ = new_node;
+        front_ = new_node;
+    }else{
+        DoublyNode *new_node = new DoublyNode(e, back_, nullptr);
+        back_->next = new_node;
+        back_ = new_node;
+    }
+
+    size_++;
 }
 
 void LinkedDequeue::EnqueueFront(Element e) {
-  // TODO: напишите здесь свой код ...
+    if(size_ == 0){
+        DoublyNode *new_node = new DoublyNode(e, nullptr, nullptr);
+        back_ = new_node;
+        front_ = new_node;
+    }else{
+        DoublyNode *new_node = new DoublyNode(e, nullptr, front_);
+        front_->previous = new_node;
+        front_ = new_node;
+    }
+
+    size_++;
 }
 
 void LinkedDequeue::Dequeue() {
@@ -17,7 +37,22 @@ void LinkedDequeue::Dequeue() {
     throw std::logic_error("cannot not dequeue from empty queue");
   }
 
-  // TODO: напишите здесь свой код ...
+  if (size_ == 1) {
+      delete front_;
+      front_ = nullptr;
+      back_ = nullptr;
+  }
+  if (size_ == 2) {
+      delete front_;
+      front_ = back_;
+  }
+  if (size_ > 2) {
+      DoublyNode *second_node = front_->next;
+      delete front_;
+      front_ = second_node;
+  }
+
+  size_--;
 }
 
 void LinkedDequeue::DequeueBack() {
@@ -25,11 +60,33 @@ void LinkedDequeue::DequeueBack() {
     throw std::logic_error("cannot not dequeue from empty queue");
   }
 
-  // TODO: напишите здесь свой код ...
+  if(size_ == 1){
+      delete front_;
+      front_ = nullptr;
+      back_ = nullptr;
+  }
+
+  if (size_ > 1){
+      DoublyNode *preback_node = back_->previous;
+      delete back_;
+      back_ = preback_node;
+      back_->next = nullptr;
+  }
+
+  size_--;
 }
 
 void LinkedDequeue::Clear() {
-  // TODO: напишите здесь свой код ...
+    for(DoublyNode *curr_node = back_; curr_node != nullptr; /**/) {
+        DoublyNode *node = curr_node;
+        curr_node = curr_node->next;
+        delete node;
+    }
+
+
+    size_ = 0;
+    front_ = nullptr;
+    back_ = nullptr;
 }
 
 // === РЕАЛИЗОВАНО ===
